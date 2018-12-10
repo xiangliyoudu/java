@@ -4,105 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 不使用namespace的话sql搜索定位会比较方便 -->
-<mapper namespace="cn.dao.IBackendUserDao">
-<!-- 
-	<resultMap id="RM_BackendUser" type="cn.pojo.BackendUser">
-        <result property="id" column="id"/>
-        <result property="userCode" column="userCode"/>
-        <result property="userName" column="userName"/>
-        <result property="userType" column="userType"/>
-        <result property="createdBy" column="createdBy"/>
-        <result property="creationDate" column="creationDate"/>
-        <result property="modifyBy" column="modifyBy"/>
-        <result property="modifyDate" column="modifyDate"/>
-        <result property="userPassword" column="userPassword"/>
-	</resultMap>
-	
-	用于select查询公用抽取的列
-	<sql id="BackendUser_columns">
-	    <![CDATA[
-		id,userCode,userName,userType,createdBy,creationDate,modifyBy,modifyDate,userPassword
-	    ]]>
-	</sql>
-
-	useGeneratedKeys="true"(主键自增)  keyProperty="xxx" for sqlserver and mysql
-	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.pojo.BackendUser">
-    <![CDATA[
-        INSERT INTO backend_user (
-         id, userCode, userName, userType, createdBy, creationDate, modifyBy, modifyDate, userPassword
-        ) VALUES (
-         #{id}, #{userCode}, #{userName}, #{userType}, #{createdBy}, #{creationDate}, #{modifyBy}, #{modifyDate}, #{userPassword}        
-        )
-    ]]>
-			
-			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
-			DB2: order="BEFORE"" values nextval for sequenceName
-		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
-			SELECT sequenceName.nextval AS ID FROM DUAL 
-        </selectKey>
-		
-	</insert>
-    
-	<update id="update" parameterType="cn.pojo.BackendUser">
-    <![CDATA[
-        UPDATE backend_user 
-        <set >
-	         <if test="userCode != null" >
-	              userCode = #{userCode} ,  
-             </if>
-	         <if test="userName != null" >
-	              userName = #{userName} ,  
-             </if>
-	         <if test="userType != null" >
-	              userType = #{userType} ,  
-             </if>
-	         <if test="createdBy != null" >
-	              createdBy = #{createdBy} ,  
-             </if>
-	         <if test="creationDate != null" >
-	              creationDate = #{creationDate} ,  
-             </if>
-	         <if test="modifyBy != null" >
-	              modifyBy = #{modifyBy} ,  
-             </if>
-	         <if test="modifyDate != null" >
-	              modifyDate = #{modifyDate} ,  
-             </if>
-	         <if test="userPassword != null" >
-	              userPassword = #{userPassword}   
-             </if>
-	    </set>
-        WHERE 
-        	id = #{id}  	        
-    ]]>
-	</update>
-
-    传入id, 测试是否支持主键非id 
-    <delete id="delete" parameterType="cn.pojo.BackendUser">
-    <![CDATA[
-        DELETE FROM backend_user WHERE
-        id = #{id} 
-    ]]>
-    </delete>
-    
-    传入id, 测试是否支持主键非id 
-    <select id="findById" resultMap="RM_BackendUser" parameterType="java.lang.Integer" >
-		SELECT <include refid="BackendUser_columns" />
-	    <![CDATA[
-		    FROM backend_user 
-	        WHERE 
-		        id = #{id} 
-	    ]]>
-	</select>
-	传入id, 测试是否支持主键非id 
-	 <select id="findAll" resultMap="RM_BackendUser" parameterType="cn.pojo.BackendUser" >
-		SELECT <include refid="BackendUser_columns" />
-	    <![CDATA[
-		    FROM backend_user 
-	        WHERE 1=1
-	    ]]>
-	</select> -->
-	
+<mapper namespace="com.xlyd.springboot.app_platform.dao.IBackendUserDao">
 	<!-- 后台用户验证查询 -->
 	<select id="findByNameAndPwd" resultType="BackendUser">
 		SELECT
@@ -119,7 +21,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		  `userPassword`
 		FROM `backend_user`
 		WHERE userCode = #{userCode} and userPassword = #{userPassword}
-	    
 	</select>
 </mapper>
 

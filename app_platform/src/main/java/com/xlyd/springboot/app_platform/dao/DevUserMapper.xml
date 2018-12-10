@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="cn.dao.IDevUserDao">
+<mapper namespace="com.xlyd.springboot.app_platform.dao.IDevUserDao">
 
 	<select id="findByNameAndPwd" resultType="DevUser" >
 		SELECT
@@ -13,6 +13,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM `dev_user`
 		WHERE devCode=#{userCode} AND devPassword=#{userPassword}
 	</select>
-	
+
 </mapper>
 

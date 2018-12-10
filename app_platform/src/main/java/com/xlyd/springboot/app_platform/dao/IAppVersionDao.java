@@ -7,12 +7,11 @@
 
 package com.xlyd.springboot.app_platform.dao;
 
-import java.util.Date;
-import java.util.List;
-
+import com.xlyd.springboot.app_platform.entity.AppVersion;
 import org.apache.ibatis.annotations.Param;
 
-import com.xlyd.springboot.app_platform.entity.AppVersion;
+import java.util.Date;
+import java.util.List;
 
 public interface IAppVersionDao {
 

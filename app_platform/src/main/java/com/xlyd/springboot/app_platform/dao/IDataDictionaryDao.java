@@ -7,11 +7,10 @@
 
 package com.xlyd.springboot.app_platform.dao;
 
-import java.util.List;
-
+import com.xlyd.springboot.app_platform.entity.DataDictionary;
 import org.apache.ibatis.annotations.Param;
 
-import com.xlyd.springboot.app_platform.entity.DataDictionary;
+import java.util.List;
 
 /**
  *
@@ -19,6 +18,7 @@ import com.xlyd.springboot.app_platform.entity.DataDictionary;
  * @version 1.0
  * @since 1.0
  * */
+
 public interface IDataDictionaryDao {
 
 	/**

@@ -7,13 +7,12 @@
 
 package com.xlyd.springboot.app_platform.dao;
 
+import com.xlyd.springboot.app_platform.entity.AppInfo;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
-
-import com.xlyd.springboot.app_platform.entity.AppInfo;
 
 public interface IAppInfoDao {
 
