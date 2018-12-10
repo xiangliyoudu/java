@@ -1,0 +1,19 @@
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: 6868999
+
+
+mybatis:
+  type-aliases-package: com.xlyd.springboot.app_platform.entity
+  # mybatis config
+  configuration:
+    jdbc-type-for-null: null
+    auto-mapping-behavior: full
+    #mapper files location
+  mapper-locations: com/xlyd/springboot/app_platform/dao/*Mapper.xml
+
+
