@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- 引入properties文件 -->
+<!-- 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:mysqlDB.properties"/>
+	</bean> -->
+	
+	<!-- 配置DataSource -->
+<!-- 	<bean id="datasource" destroy-method="close" 
+		  class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${driver}"/>
+		<property name="url" value="${url}"/>
+		<property name="username" value="${user}"/>
+		<property name="password" value="${password}"/>
+	</bean> -->
+	
+	
+	<!-- 配置SqlSessionFactoryBean -->
+<!-- 	<bean id="sqlSessionFactory" 
+		  class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		设置命名空间
+		<property name="typeAliasesPackage" value="cn.pojo"></property> 
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:cn/dao/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean> -->
+	
+	<!-- 配置自动生成DAO实现 -->
+<!-- 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.dao"/>
+	</bean> -->
+	
+	<!-- 注解，注入业务Bean -->
+<!-- 	<context:component-scan base-package="cn.service"/> -->
+	
+	<!-- 定义事务管理器 -->
+<!-- 	<bean id="txManager" 
+	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean> -->
+	
+	<!-- 注解支持事务管理 -->
+	<!-- <tx:annotation-driven transaction-manager="txManager"/> -->
+	
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 为连接点指定事务属性 -->
+			<tx:method name="find*" isolation="DEFAULT" propagation="REQUIRED" read-only="true"/>
+			<tx:method name="add*" isolation="DEFAULT" propagation="REQUIRED"/>
+			<tx:method name="update*" isolation="DEFAULT" propagation="REQUIRED"/>
+			<tx:method name="delete*" isolation="DEFAULT" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<!-- 切入点配置 -->
+		<aop:pointcut expression="execution(* *..service.*.*(..))" id="point"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="point"/>
+	</aop:config>
+
+</beans>
+
+
+
+
