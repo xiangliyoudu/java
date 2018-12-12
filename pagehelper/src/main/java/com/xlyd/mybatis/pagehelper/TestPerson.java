@@ -3,7 +3,6 @@ package com.xlyd.mybatis.pagehelper;
 
 import java.util.List;
 
-import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -52,8 +51,25 @@ public class TestPerson {
 		sqlSession = SqlSessionUtil.getSqlSession();
 		BookDao dao = sqlSession.getMapper(BookDao.class);
 		PageHelper.startPage(1, 5);
-		List<Book> bs = dao.queryByName("一");
+		List<Book> bs = dao.queryAll();
 		PageInfo<Book> pi = new PageInfo<Book>(bs);
+		int pageNum = pi.getPageNum();
+		System.out.println(pageNum);
+		int size = pi.getSize();
+		System.out.println(size);
+		int pages = pi.getPages();
+		System.out.println(pages);
+		long total = pi.getTotal();
+		System.out.println(total);
+		boolean isHasPrePage = pi.isHasPreviousPage();
+		System.out.println(isHasPrePage);
+		int prePage = pi.getPrePage();
+		System.out.println(prePage);
+		boolean isHaxNextPage = pi.isHasNextPage();
+		System.out.println(isHaxNextPage);
+		int nextPage = pi.getNextPage();
+		System.out.println(nextPage);
+		bs = pi.getList();
 		System.out.println(pi);
 	}
 	
