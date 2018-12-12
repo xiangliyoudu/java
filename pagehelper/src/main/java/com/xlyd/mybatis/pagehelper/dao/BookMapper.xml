@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xlyd.mybatis.pagehelper.dao.BookDao">
+
+	<select id="queryAll" resultType="Book">
+		select * from book
+	</select>
+	
+	<select id="queryByName" resultType="Book">
+		select * from book
+		<where>
+			<if test="bookName != null and bookName != '' ">
+				bookName like CONCAT('%', #{bookName}, '%')
+			</if>
+		</where>
+	</select>
+
+</mapper>
