@@ -2,11 +2,13 @@ package webinitializertest;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.AutoMappingBehavior;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.LocalCacheScope;
@@ -25,6 +27,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.github.pagehelper.PageInterceptor;
 
 @Configuration
 @ComponentScan(basePackages = { "cn.service" }, excludeFilters = { @Filter(type = FilterType.ANNOTATION, value = EnableWebMvc.class) })
@@ -79,6 +83,21 @@ public class RootConfig {
 		factory.setConfiguration(mybatisConfig);
 		return factory;
 	}
+	
+	
+	/** mybatis分页插件pagehelper
+	 * @return
+	 */
+	@Bean
+	public Interceptor interceptor() {
+		PageInterceptor plug = new PageInterceptor();
+		// pageInterceptor properties
+		Properties properties = new Properties();
+		properties.setProperty("helperDialect", "mysql");
+		properties.setProperty("reasonable", "true");
+		plug.setProperties(properties );
+		return plug;
+	}
 
 	/**
 	 * mybatis configuration class (eq mybatis-config.xml)
@@ -86,7 +105,7 @@ public class RootConfig {
 	 * @return
 	 */
 	@Bean
-	public org.apache.ibatis.session.Configuration mybatisConfig() {
+	public org.apache.ibatis.session.Configuration mybatisConfig(Interceptor interceptor) {
 		org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
 		// 该配置影响的所有映射器中配置的缓存的全局开关
 		config.setCacheEnabled(true);
@@ -123,6 +142,8 @@ public class RootConfig {
 		methods.add("hashCode");
 		methods.add("toString");
 		config.setLazyLoadTriggerMethods(methods);
+		// 添加分页插件拦截器 PageInterceptor
+		config.addInterceptor(interceptor);
 		return config;
 	}
 

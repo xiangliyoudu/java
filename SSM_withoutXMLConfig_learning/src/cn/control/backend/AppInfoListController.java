@@ -27,6 +27,8 @@ import cn.service.backend.IAppVersionService;
 import cn.service.backend.IDataDictionaryService;
 
 import com.alibaba.fastjson.JSONArray;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Controller
 @RequestMapping("/manager/backend/app")
@@ -97,13 +99,23 @@ public class AppInfoListController {
 		map.put("categoryLevel1", queryCategoryLevel1);
 		map.put("categoryLevel2", queryCategoryLevel2);
 		map.put("categoryLevel3", queryCategoryLevel3);
+		
+		// page helper
+		PageHelper.startPage(pageIndex, ROW);
+		List<AppInfo> appInfoList1 = appInfoService.findAll(map);
+		PageInfo<AppInfo> pi = new PageInfo<AppInfo>(appInfoList1);
+		appInfoList1 = pi.getList();
+		
 		// 设置总记录数
 		int count = appInfoService.appCount(map);
-
+//		count = pi.getTotal();
+		
 		pages.setTotalCount(count);
-		// pages.setTotalPageCountByRs();
+		
 		// 计算查询初始位置
 		int start = (pages.getCurrentPageNo() - 1) * pages.getPageSize();
+//		start = pi.getStartRow();
+		
 		// 添加分页查询参数
 		map.put("start", start);
 		map.put("size", pages.getPageSize());
