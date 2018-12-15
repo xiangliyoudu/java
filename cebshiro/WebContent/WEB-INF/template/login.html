@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="#" th:action="@{dologin}" th:object="${user}" method="post">
+		<input type="text" th:field="*{username}" name="username"/>username<br/>
+		<input type="password" th:field="*{password}" name="password"/>password<br/>
+		<input type="submit" />
+	</form>
+</body>
+</html>

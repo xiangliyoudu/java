@@ -1,39 +1,42 @@
 package config;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.standard.StandardDialect;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import com.alibaba.fastjson.support.config.FastJsonConfig;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import javax.servlet.ServletContext;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @ComponentScan(basePackages = { "controller" })
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-	/**
-	 * ÊÓÍ¼½âÎöÆ÷
-	 * 
-	 * @return
-	 */
-	@Bean
-	public InternalResourceViewResolver viewResolver() {
-		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-		resolver.setPrefix("/WEB-INF/jsp/");
-		resolver.setSuffix(".jsp");
-		return resolver;
-	}
+//	@Bean
+//	public InternalResourceViewResolver viewResolver() {
+//		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+//		resolver.setPrefix("/WEB-INF/jsp/");
+//		resolver.setSuffix(".jsp");
+//		return resolver;
+//	}
 
 	@Override
 	public void configureDefaultServletHandling(
@@ -43,7 +46,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-		// fastJson ÏûÏ¢×ª»»Æ÷
+		// fastJson ï¿½ï¿½Ï¢×ªï¿½ï¿½ï¿½ï¿½
 		FastJsonHttpMessageConverter jsonMessageConverter = new FastJsonHttpMessageConverter();
 		// fastJson config
 		FastJsonConfig fastJsonConfig = new FastJsonConfig();
@@ -54,8 +57,52 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		jsonMediaTypes.add(MediaType.APPLICATION_JSON);
 		jsonMediaTypes.add(MediaType.TEXT_HTML);
 		jsonMessageConverter.setSupportedMediaTypes(jsonMediaTypes);
-		// Ìí¼ÓÏûÏ¢×ª»»Æ÷
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢×ªï¿½ï¿½ï¿½ï¿½
 		converters.add(jsonMessageConverter);
 	}
 
+	
+	/**
+	 * thymeleaf ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 *
+	 * @param engine
+	 * @return
+	 */
+	@Bean
+	public ViewResolver viewResolver(SpringTemplateEngine engine) {
+		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+		resolver.setTemplateEngine(engine);
+		resolver.setOrder(1);
+		return resolver;
+	}
+
+	/**
+	 * themeleaf Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 *
+	 * @param resolver
+	 * @return
+	 */
+	@Bean
+	public SpringTemplateEngine templateEngine(ITemplateResolver resolver) {
+		SpringTemplateEngine engine = new SpringTemplateEngine();
+		engine.setTemplateResolver(resolver);
+		engine.setDialect(new StandardDialect());
+		return engine;
+	}
+
+	/**
+	 * thymeleaf Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	 *
+	 * @param servletContext
+	 * @return
+	 */
+	@Bean
+	public ITemplateResolver iTemplateResolver(ServletContext servletContext) {
+		ServletContextTemplateResolver resolver = new ServletContextTemplateResolver(
+				servletContext);
+		resolver.setPrefix("/WEB-INF/template/");
+		resolver.setSuffix(".html");
+		resolver.setTemplateMode(TemplateMode.HTML);
+		return resolver;
+	}
 }

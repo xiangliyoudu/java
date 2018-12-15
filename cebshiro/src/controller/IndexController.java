@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import dao.UserDao;
 import pojo.User;
 import utils.PasswordUtil;
+import dao.UserDao;
 
 @Controller
 public class IndexController {
@@ -24,7 +24,10 @@ public class IndexController {
 	UserDao userDao;
 
 	@RequestMapping({"/login", "/"})
-	public String loginPage() {
+	public String loginPage(Model model) {
+		User user = new User();
+		model.addAttribute("user", user);
+//System.out.println("index page");
 		return "login";
 	}
 
