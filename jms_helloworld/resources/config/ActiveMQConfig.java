@@ -11,9 +11,10 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 
+import com.xlyd.jms.helloworld.JmsMarker;
+
 @Configuration
-//@ImportResource("classpath:activeMQ-config.xml")
-@ComponentScan(basePackages={"com.xlyd.jms.helloworld"})
+@ComponentScan(basePackageClasses={JmsMarker.class})
 public class ActiveMQConfig {
 	public static final String QUEUE = "myqueue";
 	public static final String TOPIC = "mytopic";
@@ -41,7 +42,7 @@ public class ActiveMQConfig {
 		return top;
 	}
 	
-//	@Bean
+	@Bean
 	public MappingJackson2MessageConverter mappingJackson2MessageConverter() {
 		MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
 		return converter;
@@ -49,11 +50,13 @@ public class ActiveMQConfig {
 	
 	@Bean // jmstemplate，注入connectionfactory
 	public JmsTemplate template(ActiveMQConnectionFactory factory, 
-							    ActiveMQQueue queue) {
+							    ActiveMQQueue queue,
+							    ActiveMQTopic topic,
+							    MappingJackson2MessageConverter messageConverter) {
 		JmsTemplate temp = new JmsTemplate();
 		temp.setConnectionFactory(factory);
 		// set message converter
-//		temp.setMessageConverter(messageConverter);
+		temp.setMessageConverter(messageConverter);
 		temp.setDefaultDestination(queue);
 		return temp;
 	}
@@ -69,7 +72,7 @@ public class ActiveMQConfig {
 	}
 	
 	@Bean
-	public JmsListenerContainerFactory<?> jmsListenerContainerqueue(ActiveMQConnectionFactory factory) {
+	public JmsListenerContainerFactory<?> jmsListenerContainerQueue(ActiveMQConnectionFactory factory) {
 		DefaultJmsListenerContainerFactory container = new DefaultJmsListenerContainerFactory();
 		container.setConnectionFactory(factory);
 		return container;
