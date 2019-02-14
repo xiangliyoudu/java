@@ -18,4 +18,9 @@ public class IDevUserServiceImpl implements IDevUserService {
         return iDevUserDao.findByNameAndPwd(userCode, userPassword);
     }
 
+    @Override
+    public DevUser findByName(String username) {
+        return iDevUserDao.findByName(username);
+    }
+
 }

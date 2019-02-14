@@ -18,29 +18,30 @@ public interface IDevUserDao {
     /**
      * 创建DevUser
      **/
-    public void save(DevUser devUser);
+    void save(DevUser devUser);
 
     /**
      * 更新DevUser
      **/
-    public void update(DevUser devUser);
+    void update(DevUser devUser);
 
     /**
      * 删除DevUser
      **/
-    public void deleteById(Long id);
+    void deleteById(Long id);
 
     /**
      * 根据ID查询DevUser
      **/
-    public DevUser findById(Long id);
+    DevUser findById(Long id);
 
     /**
      * 查询: DevUser
      **/
-    public List<DevUser> findAll(Map<String, Object> paraMap);
+    List<DevUser> findAll(Map<String, Object> paraMap);
 
-    public DevUser findByNameAndPwd(@Param("userCode") String userCode,
-                                    @Param("userPassword") String userPassword);
+    DevUser findByNameAndPwd(@Param("userCode") String userCode,
+                             @Param("userPassword") String userPassword);
 
+    DevUser findByName(@Param("username") String username);
 }

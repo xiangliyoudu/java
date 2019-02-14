@@ -14,5 +14,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE devCode=#{userCode} AND devPassword=#{userPassword}
 	</select>
 
+	<select id="findByName" resultType="com.xlyd.springboot.app_platform.entity.DevUser">
+		select * from dev_user where devname = #{username}
+	</select>
+
 </mapper>
 

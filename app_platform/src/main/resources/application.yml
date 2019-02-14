@@ -2,9 +2,9 @@ server:
   servlet:
     context-path: /ssmapp
 
-
-
 spring:
+  profiles:
+    active: dev
   datasource:
     url: jdbc:mysql://localhost:3306/test
     username: root
@@ -25,3 +25,28 @@ mybatis:
 pagehelper:
   helper-dialect: mysql
   reasonable: true
+
+
+
+---
+spring:
+  profiles: prod
+  thymeleaf:
+    cache: true
+
+logging:
+  level:
+    root:
+      WARNING
+    org.spring.security:
+      ERROR
+---
+spring:
+  profiles: dev
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    root:
+      DEBUG
