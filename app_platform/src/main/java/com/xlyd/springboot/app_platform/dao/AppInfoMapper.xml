@@ -54,12 +54,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND categoryLevel3 = #{categoryLevel3}
 			</if>
 		</where>
-		limit #{start}, #{size}
+
 	</select>
+<!--limit #{start}, #{size}-->
 
 	<!-- 查询所有待审查记录数 -->
 	<select id="appCount" resultType="Integer">
-		select count(id) from `app_info` a 
+		select count(id) from `app_info` a
 		<where>
 			<if test="status != null and status != '' ">
 				a.`status` = #{status}
@@ -117,7 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
 	</select>
-	
+
 	<!-- 跟新appinfo状态 -->
 	<update id="updateStatus">
 		UPDATE app_info SET
@@ -126,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			`status` = #{status} 
 		WHERE id = #{id}; 
 	</update>
-	
+
 	<!-- 通过APKname查找记录 -->
 	<select id="findByAPKName" resultType="AppInfo" parameterType="String">
 	SELECT `id`,`softwareName`,`APKName`,`supportROM`,`interfaceLanguage`,
@@ -141,9 +142,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 	</where>
 	</select>
-	
+
 	<!-- 添加appInfo记录 -->
-	<insert id="addAppInfo" parameterType="AppInfo" 
+	<insert id="addAppInfo" parameterType="AppInfo"
 			useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO `app_info`
             (`id`,`softwareName`,`APKName`,`supportROM`,`interfaceLanguage`,
@@ -157,7 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{categoryLevel1},#{categoryLevel2},#{logoPicPath},#{logoLocPath}
 			)
 	</insert>
-	
+
 	<!-- 跟新appinfo versionId -->
 	<update id="updateVersionId">
 		UPDATE app_info SET 
@@ -166,7 +167,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			`versionId` = #{versionId}
 		WHERE id = #{id}; 
 	</update>
-	
+
 	<!-- 清空logoLocPath -->
 	<update id="emptyLogoPicPath">
 		UPDATE app_info SET 
@@ -175,7 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			`modifyDate` = #{modifyDate}
 		WHERE id = #{id};
 	</update>
-	
+
 	<!-- 跟新记录 -->
 	<update id="update" parameterType="AppInfo">
 		UPDATE `app_info`
@@ -186,7 +187,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="APKName != null">
 			  `APKName` = #{APKName},
 			</if>
-			
+
 			<if test="supportROM != null">
 			  `supportROM` = #{supportROM},
 			</if>
@@ -202,7 +203,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="devId != null">
 			  `devId` = #{devId},
 			</if>
-			  
+
 			<if test="appInfo != null">
 			  `appInfo` = #{appInfo},
 			</if>
@@ -217,8 +218,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="flatformId != null">
 			  `flatformId` = #{flatformId},
-			</if>  
-			  
+			</if>
+
 			<if test="categoryLevel3 != null">
 			  `categoryLevel3` = #{categoryLevel3},
 			</if>
@@ -233,8 +234,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="categoryLevel1 != null">
 			  `categoryLevel1` = #{categoryLevel1},
-			</if>   
-			  
+			</if>
+
 			<if test="categoryLevel2 != null">
 			  `categoryLevel2` = #{categoryLevel2},
 			</if>
@@ -246,15 +247,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="versionId != null">
 			  `versionId` = #{versionId},
-			</if>    		
+			</if>
 		 </set>
 		WHERE `id` = #{id};
 	</update>
-	
+
 	<delete id="deleteById">
 		DELETE FROM .`app_info`
 		WHERE `id` = #{id};
 	</delete>
-	
+
 </mapper>
 

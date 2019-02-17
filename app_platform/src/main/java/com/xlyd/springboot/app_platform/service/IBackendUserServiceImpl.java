@@ -17,12 +17,4 @@ public class IBackendUserServiceImpl implements IBackendUserService {
         return iBackendUserDao.findByNameAndPwd(userCode, userPassword);
     }
 
-    public IBackendUserDao getIBackendUserDao() {
-        return iBackendUserDao;
-    }
-
-    public void setIBackendUserDao(IBackendUserDao iBackendUserDao) {
-        this.iBackendUserDao = iBackendUserDao;
-    }
-
 }

@@ -1,21 +1,29 @@
 server:
   servlet:
     context-path: /ssmapp
+  port: 8800
 
 spring:
-  profiles:
-    active: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/test
+    # ?serverTimezone=GMT%2B8 ：解决mysql时区乱码问题
+    url: jdbc:mysql://localhost:3306/appinfodb?serverTimezone=GMT%2B8
     username: root
     password: 6868999
 
 
+  servlet:
+    multipart:
+      enabled: true
+      location: E:/temp
+
+
+
 
 mybatis:
+  # 包名格式为 xxx.yyy.zzz
   type-aliases-package: com.xlyd.springboot.app_platform.entity
   # mapper files location
-  mapper-locations: com/xlyd/springboot/app_platform/dao/*Mapper.xml
+  mapper-locations: classpath:com/xlyd/springboot/app_platform/dao/*Mapper.xml
   # mybatis config
   configuration:
     jdbc-type-for-null: null
@@ -26,27 +34,7 @@ pagehelper:
   helper-dialect: mysql
   reasonable: true
 
-
-
----
-spring:
-  profiles: prod
-  thymeleaf:
-    cache: true
-
 logging:
   level:
     root:
-      WARNING
-    org.spring.security:
-      ERROR
----
-spring:
-  profiles: dev
-  thymeleaf:
-    cache: false
-
-logging:
-  level:
-    root:
-      DEBUG
+      INFO

@@ -8,6 +8,7 @@
 package com.xlyd.springboot.app_platform.dao;
 
 import com.xlyd.springboot.app_platform.entity.DataDictionary;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
