@@ -5,6 +5,7 @@ import com.xlyd.springboot.app_platform.service.IBackendUserService;
 import com.xlyd.springboot.app_platform.tool.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,19 +26,27 @@ public class AppInfoController {
         return "backendlogin";
     }
 
+    @RequestMapping(value = "/main")
+    public String doMain() {
+        return "backend/main";
+    }
+
     @RequestMapping(value = "/dologin", method = RequestMethod.POST)
     public String mdoLogin(@RequestParam String userCode,
                            @RequestParam String userPassword,
-                           HttpSession session) {
+                           HttpSession httpSession,
+                           RedirectAttributes model) {
         //待完善，需要查询出用户类型名称
         BackendUser bUser = iBackendUserService.findByNameAndPwd(userCode, userPassword);
 
-        String mav = null;
+        String mav;
         if (bUser != null) {
-            mav = "backend/main";
-            session.setAttribute(Constants.USER_SESSION, bUser);
+            mav = "redirect:/manager/main";
+            model.addFlashAttribute(Constants.BACKEND_USER_SESSION, bUser);
+            httpSession.setAttribute(Constants.BACKEND_USER_SESSION, bUser);
         } else {
-            mav = "redirect:403";
+            model.addAttribute("error", "用户名或密码错误！！");
+            mav = "backendlogin";
         }
         return mav;
     }

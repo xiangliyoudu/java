@@ -19,7 +19,7 @@ public class CustomerInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         //获取用户登录对象
         BackendUser backendUser =
-                (BackendUser) session.getAttribute(Constants.USER_SESSION);
+                (BackendUser) session.getAttribute(Constants.BACKEND_USER_SESSION);
         DevUser devUser =
                 (DevUser) session.getAttribute(Constants.DEV_USER_SESSION);
 

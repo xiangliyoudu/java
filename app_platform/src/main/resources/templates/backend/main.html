@@ -48,7 +48,7 @@
                     </div>
                     <div class="profile_info">
                         <span>Welcome,</span>
-                        <h2>${userSession.userCode }</h2>
+                        <h2 th:text="${backendUserSession.userCode }"></h2>
                     </div>
                 </div>
                 <!-- /menu profile quick info -->
@@ -58,7 +58,7 @@
                 <!-- sidebar menu -->
                 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                     <div class="menu_section">
-                        <h3>${userSession.userName }</h3>
+                        <h3 th:text="${backendUserSession.userName }"></h3>
                         <ul class="nav side-menu">
                             <li><a><i class="fa fa-home"></i> APP管理 <span class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
@@ -116,8 +116,8 @@
                         <li class="">
                             <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
-                                <img th:src="@{/images/img.jpg}" src="../../static/images/img.jpg" alt="">
-                                ${userSession.userCode }
+                                <img th:src="@{/images/img.jpg}" src="../../static/images/img.jpg" alt=""
+                                     th:text=" ${backendUserSession.userCode }">
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -131,7 +131,7 @@
                             <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                                 <li>
                                     <a> <span class="image">
-                                            <img th:src="@{images/img.jpg}" src="../../static/images/img.jpg"
+                                            <img th:src="@{/images/img.jpg}" src="../../static/images/img.jpg"
                                                  alt="Profile Image"/></span>
                                         <span>
                                             <span>John Smith</span>
@@ -145,7 +145,7 @@
                                 <li>
                                     <a>
                                         <span class="image">
-                                            <img th:src="@{images/img.jpg}" src="../../static/images/img.jpg"
+                                            <img th:src="@{/images/img.jpg}" src="../../static/images/img.jpg"
                                                  alt="Profile Image"/></span>
                                         <span>
                                             <span>John Smith</span>
@@ -159,29 +159,30 @@
                                 <li>
                                     <a>
                                         <span class="image">
-                                            <img th:src="@{images/img.jpg}" src="../../static/images/img.jpg"
+                                            <img th:src="@{/images/img.jpg}" src="../../static/images/img.jpg"
                                                  alt="Profile Image"/></span>
                                         <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
+                                            <span>John Smith</span>
+                                            <span class="time">3 mins ago</span>
+                                        </span>
+                                            <span class="message">
+                                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                                        </span>
                                     </a>
                                 </li>
                                 <li>
                                     <a>
                                         <span class="image">
-                                            <img th:src="@{images/img.jpg}" src="../../static/images/img.jpg"
-                                                 alt="Profile Image"/></span>
+                                            <img th:src="@{/images/img.jpg}" src="../../static/images/img.jpg"
+                                                 alt="Profile Image"/>
+                                        </span>
                                         <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
+                                            <span>John Smith</span>
+                                            <span class="time">3 mins ago</span>
+                                        </span>
                                         <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
+                                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                                        </span>
                                     </a>
                                 </li>
                                 <li>
@@ -206,7 +207,8 @@
                     <div class="title_left">
                         <h2>
                             <h3>
-                                欢迎你：${userSession.userName }<strong> | 角色：${userSession.userTypeName }</strong>
+                                欢迎你：<span th:text="${backendUserSession.userName }"></span>
+                                <strong>| 角色：<span th:text="${backendUserSession.userTypeName }"></span></strong>
                             </h3>
                         </h2>
                     </div>

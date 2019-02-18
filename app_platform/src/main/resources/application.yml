@@ -10,7 +10,6 @@ spring:
     username: root
     password: 6868999
 
-
   servlet:
     multipart:
       enabled: true
