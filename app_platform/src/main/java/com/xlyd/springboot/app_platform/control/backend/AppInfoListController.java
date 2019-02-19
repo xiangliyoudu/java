@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -90,7 +89,7 @@ public class AppInfoListController {
             pageIndex = 1;
         }
         // 分页查询
-        PageHelper.startPage(pageIndex, Constants.pageSize);
+        PageHelper.startPage(pageIndex, Constants.PAGE_SIZE);
         List<AppInfo> appInfoList = appInfoService.findAll(map);
         PageInfo<AppInfo> pageInfo = new PageInfo<>(appInfoList);
 
@@ -119,17 +118,6 @@ public class AppInfoListController {
         String cjson = JSONArray.toJSONString(categoryLevelList);
         return cjson;
     }
-
-    // Ajax查询“所属平台”列表
-	/*@RequestMapping(value = "/datadictionarylist.json", method = RequestMethod.GET)
-	@ResponseBody
-	public Object flatFormlist(String tcode) {
-		List<DataDictionary> flatFormList = 
-				IDataDictionaryService.findListByTypeCode(tcode);
-				
-		String cjson = JSONArray.toJSONString(flatFormList);
-		return cjson;
-	}*/
 
     @RequestMapping(value = "/check", method = RequestMethod.GET)
     public String checkAppinfo(Integer aid, Integer vid, Model model) {

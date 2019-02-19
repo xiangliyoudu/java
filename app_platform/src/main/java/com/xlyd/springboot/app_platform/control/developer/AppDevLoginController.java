@@ -49,7 +49,7 @@ public class AppDevLoginController {
         if (devUser != null) {
             model.addFlashAttribute(Constants.DEV_USER_SESSION, devUser);
             session.setAttribute(Constants.DEV_USER_SESSION, devUser);
-            mav = "redirect:/developer/main";
+            mav = "redirect:/dev/main";
         } else {
             model.addAttribute("error", "用户名或密码错误！！");
             mav = "devlogin";

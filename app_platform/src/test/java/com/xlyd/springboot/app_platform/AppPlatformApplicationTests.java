@@ -4,7 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xlyd.springboot.app_platform.entity.AppInfo;
 import com.xlyd.springboot.app_platform.entity.BackendUser;
+import com.xlyd.springboot.app_platform.entity.DevUser;
 import com.xlyd.springboot.app_platform.service.IBackendUserService;
+import com.xlyd.springboot.app_platform.service.IDevUserService;
 import com.xlyd.springboot.app_platform.service.backend.AppInfoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +30,9 @@ public class AppPlatformApplicationTests {
 
     @Autowired
     IBackendUserService service;
+
+    @Autowired
+    IDevUserService iDevUserService;
 
     @Autowired
     JdbcOperations jdbcOperations;
@@ -58,6 +63,12 @@ public class AppPlatformApplicationTests {
         PageInfo<AppInfo> pageInfo = new PageInfo<>(appInfos);
         log.info(pageInfo.getPages() + "");
 
+    }
+
+    @Test
+    public void testDevUser() {
+        DevUser devUsers = iDevUserService.findByNameAndPwd("test001", "123");
+        log.info(devUsers.getDevName());
     }
 }
 
