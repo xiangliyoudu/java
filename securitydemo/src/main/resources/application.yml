@@ -1,0 +1,6 @@
+server:  port: 8080
+
+spring: 
+  mvc:
+    servlet:      path: /sectest
+    datasource:    url: jdbc:mysql://localhost:3306/smbms?serverTimezone=GMT%2B8    username: root    password: 6868999      jackson:    date-format: yyyy-MM-dd hh:mm:ss    time-zone: GMT+8#    serialization: #     write-dates-as-timestamps: true  security:    user:      name: tom      password: 123              logging:  level:     ROOT: INFO        mybatis:  type-aliases-package: com.xlyd.demo.entity  mapper-locations: classpath:com/xlyd/demo/dao/*Mapper.xml  configuration:    auto-mapping-behavior: full       jdbc-type-for-null: null                 
