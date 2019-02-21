@@ -5,22 +5,36 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class User implements UserDetails{
+public class User implements UserDetails {
 
 	private static final long serialVersionUID = 2771458362851441112L;
-	
+
 	private Integer id; // 主键ID
 	private String userCode; // 用户编码
 	private String userName; // 用户名称
+	
+	@Size(min=60, max=100)
 	private String userPassword; // 用户密码
 
+	@Min(1)
+	@Max(2)
 	private Integer gender; // 性别（1:女、 2:男）
+	private String sex;
+	
+	@Past
 	private Date birthday; // 出生日期
 
+	@Min(11)
+	@Max(11)
 	private String phone; // 手机
 	private String address; // 地址
 
@@ -35,11 +49,10 @@ public class User implements UserDetails{
 
 	@Override
 	public String toString() {
-		return "User{" + "id=" + id + ", userCode='" + userCode + '\'' + ", userName='" + userName + '\''
-				+ ", userPassword='" + userPassword + '\'' + ", gender=" + gender + ", birthday=" + birthday
-				+ ", phone='" + phone + '\'' + ", address='" + address + '\'' + ", userRole=" + userRole + ", role="
-				+ role + ", createdBy=" + createdBy + ", creationDate=" + creationDate + ", modifyBy=" + modifyBy
-				+ ", modifyDate=" + modifyDate + '}';
+		return "User [id=" + id + ", userCode=" + userCode + ", userName=" + userName + ", userPassword=" + userPassword
+				+ ", sex=" + this.getSex() + ", birthday=" + birthday + ", phone=" + phone + ", address=" + address
+				+ ", userRole=" + userRole + ", role=" + role + ", createdBy=" + createdBy + ", creationDate="
+				+ creationDate + ", modifyBy=" + modifyBy + ", modifyDate=" + modifyDate + "]";
 	}
 
 	public Integer getId() {
@@ -80,6 +93,23 @@ public class User implements UserDetails{
 
 	public void setGender(Integer gender) {
 		this.gender = gender;
+	}
+
+	public String getSex() {
+		if (this.getGender() == 1) {
+			sex = "女";
+		} else if (this.getGender() == 2) {
+			sex = "男";
+		}
+		return sex;
+	}
+
+	public void setSex(Integer sex) {
+		if (sex == 1) {
+			this.sex = "女";
+		} else if (sex == 2) {
+			this.sex = "男";
+		}
 	}
 
 	public Date getBirthday() {
@@ -153,7 +183,7 @@ public class User implements UserDetails{
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> authos = new ArrayList<>();

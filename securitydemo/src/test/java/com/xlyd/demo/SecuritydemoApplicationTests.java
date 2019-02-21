@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.xlyd.demo.dao.AddressDao;
 import com.xlyd.demo.dao.RoleDao;
 import com.xlyd.demo.dao.UserDao;
+import com.xlyd.demo.entity.Address;
 import com.xlyd.demo.entity.Role;
 import com.xlyd.demo.entity.User;
 import com.xlyd.demo.util.CryptUtils;
@@ -76,6 +78,17 @@ public class SecuritydemoApplicationTests {
 		String _pwd = userDao.findByUsername("admin").getUserPassword();
 		boolean flag = CryptUtils.getPasswordEncoder().matches(pwd, _pwd);
 		log.info(flag + "");
+	}
+	
+	@Autowired
+	AddressDao addressDao;
+	
+	@Test
+	public void testAddressByUserId() {
+		List<Address> addresses = addressDao.findByUserId(1);
+		log.info(addresses.toString());
+		Address addr = addressDao.findById(1);
+		log.info(addr.getAddressDesc());
 	}
 	
 }
