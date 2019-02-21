@@ -1,217 +1,199 @@
 package com.xlyd.demo.entity;
 
-import com.xlyd.demo.dao.RoleDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class User implements UserDetails {
+public class User implements UserDetails{
 
-    private static final long serialVersionUID = 8130570436056646839L;
+	private static final long serialVersionUID = 2771458362851441112L;
+	
+	private Integer id; // 主键ID
+	private String userCode; // 用户编码
+	private String userName; // 用户名称
+	private String userPassword; // 用户密码
 
-    private Integer id; // 主键ID
-    private String userCode; // 用户编码
-    private String userName; // 用户名称
-    private String userPassword; // 用户密码
+	private Integer gender; // 性别（1:女、 2:男）
+	private Date birthday; // 出生日期
 
-    private Integer gender; // 性别（1:女、 2:男）
-    private Date birthday; // 出生日期
+	private String phone; // 手机
+	private String address; // 地址
 
-    private String phone; // 手机
-    private String address; // 地址
+	private Integer userRole; // 用户角色（取自角色表-角色id）
+	private Role role; // 用户角色
 
-    private Integer userRole; // 用户角色（取自角色表-角色id）
-    private Role role; // 用户角色
+	private Integer createdBy;// 创建者（userId）
+	private Date creationDate;// 创建时间
 
-    private Integer createdBy;// 创建者（userId）
-    private Date creationDate;// 创建时间
+	private Integer modifyBy;// 更新者（userId）
+	private Date modifyDate;// 更新时间
 
-    private Integer modifyBy;// 更新者（userId）
-    private Date modifyDate;// 更新时间
+	@Override
+	public String toString() {
+		return "User{" + "id=" + id + ", userCode='" + userCode + '\'' + ", userName='" + userName + '\''
+				+ ", userPassword='" + userPassword + '\'' + ", gender=" + gender + ", birthday=" + birthday
+				+ ", phone='" + phone + '\'' + ", address='" + address + '\'' + ", userRole=" + userRole + ", role="
+				+ role + ", createdBy=" + createdBy + ", creationDate=" + creationDate + ", modifyBy=" + modifyBy
+				+ ", modifyDate=" + modifyDate + '}';
+	}
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userCode='" + userCode + '\'' +
-                ", userName='" + userName + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", gender=" + gender +
-                ", birthday=" + birthday +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", userRole=" + userRole +
-                ", role=" + role +
-                ", createdBy=" + createdBy +
-                ", creationDate=" + creationDate +
-                ", modifyBy=" + modifyBy +
-                ", modifyDate=" + modifyDate +
-                '}';
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    @Autowired
-    RoleDao roleDao;
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        Role role = roleDao.findById(this.getUserRole());
-        authorities.add(new SimpleGrantedAuthority(role.getRoleCode()));
-        return authorities;
-    }
+	public String getUserCode() {
+		return userCode;
+	}
 
-    @Override
-    public String getPassword() {
-        // TODO Auto-generated method stub
-        return this.getPassword();
-    }
+	public void setUserCode(String userCode) {
+		this.userCode = userCode;
+	}
 
-    @Override
-    public String getUsername() {
-        // TODO Auto-generated method stub
-        return this.getUserName();
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        // TODO Auto-generated method stub
-        return true;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        // TODO Auto-generated method stub
-        return true;
-    }
+	public String getUserPassword() {
+		return userPassword;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        // TODO Auto-generated method stub
-        return true;
-    }
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return true;
-    }
+	public Integer getGender() {
+		return gender;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public void setGender(Integer gender) {
+		this.gender = gender;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Date getBirthday() {
+		return birthday;
+	}
 
-    public String getUserCode() {
-        return userCode;
-    }
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
 
-    public void setUserCode(String userCode) {
-        this.userCode = userCode;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public String getUserName() {
-        return userName;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public String getUserPassword() {
-        return userPassword;
-    }
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
+	public Integer getUserRole() {
+		return userRole;
+	}
 
-    public Integer getGender() {
-        return gender;
-    }
+	public void setUserRole(Integer userRole) {
+		this.userRole = userRole;
+	}
 
-    public void setGender(Integer gender) {
-        this.gender = gender;
-    }
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
 
-    public Date getBirthday() {
-        return birthday;
-    }
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
+	public Date getCreationDate() {
+		return creationDate;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	public Integer getModifyBy() {
+		return modifyBy;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public void setModifyBy(Integer modifyBy) {
+		this.modifyBy = modifyBy;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public Date getModifyDate() {
+		return modifyDate;
+	}
 
-    public Integer getUserRole() {
-        return userRole;
-    }
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
 
-    public void setUserRole(Integer userRole) {
-        this.userRole = userRole;
-    }
+	public Role getRole() {
+		return role;
+	}
 
-    public Integer getCreatedBy() {
-        return createdBy;
-    }
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authos = new ArrayList<>();
+		authos.add(new SimpleGrantedAuthority(this.getRole().getRoleCode()));
+		return authos;
+	}
 
-    public void setCreatedBy(Integer createdBy) {
-        this.createdBy = createdBy;
-    }
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return this.getUserPassword();
+	}
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.getUserCode();
+	}
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
-    public Integer getModifyBy() {
-        return modifyBy;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
-    public void setModifyBy(Integer modifyBy) {
-        this.modifyBy = modifyBy;
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

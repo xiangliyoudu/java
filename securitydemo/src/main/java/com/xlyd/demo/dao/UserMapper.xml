@@ -25,10 +25,10 @@
 		<result column="modifyBy" property="modifyBy"/>
 		<result column="modifyDate" property="modifyDate"/>
 		<!--role-->
-		<association property="role" resultMap="roleResult"/>
+		<association property="role" resultMap="roleResult" />
 	</resultMap>
 
-	<resultMap id="roleResult" type="com.xlyd.demo.entity.Role"> 
+	<resultMap id="roleResult" type="com.xlyd.demo.entity.Role">
 		<id column="id" property="id"/>
 		<result column="roleCode" property="roleCode"/>
 		<result column="roleName" property="roleName"/>
@@ -50,8 +50,8 @@
 	</select>
 
 	<select id="findByUsername" resultMap="result1">
-		select <include refid="colum1"/>, u.userPassword from smbms_user u
-		where u.userCode = #{userCode}
+		select <include refid="colum1"/>, u.userPassword, r.* from smbms_user u
+		INNER JOIN smbms_role r WHERE u.`userRole` = r.id and u.userCode = #{userCode}
 	</select>
 
 </mapper>
