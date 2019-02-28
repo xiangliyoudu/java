@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
@@ -19,9 +20,12 @@ public class User implements UserDetails {
 	private static final long serialVersionUID = 2771458362851441112L;
 
 	private Integer id; // 主键ID
+	
+	@NotNull
 	private String userCode; // 用户编码
 	private String userName; // 用户名称
 	
+	@NotNull
 	@Size(min=60, max=100)
 	private String userPassword; // 用户密码
 

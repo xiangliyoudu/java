@@ -1,12 +1,18 @@
 package com.xlyd.demo;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.xlyd.demo.dao.AddressDao;
@@ -15,6 +21,7 @@ import com.xlyd.demo.dao.UserDao;
 import com.xlyd.demo.entity.Address;
 import com.xlyd.demo.entity.Role;
 import com.xlyd.demo.entity.User;
+import com.xlyd.demo.service.UserService;
 import com.xlyd.demo.util.CryptUtils;
 import com.xlyd.demo.util.LogUtils;
 
@@ -90,6 +97,47 @@ public class SecuritydemoApplicationTests {
 		Address addr = addressDao.findById(1);
 		log.info(addr.getAddressDesc());
 	}
+	
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	CacheManager cacheManager;
+	
+	@Test
+	public void testCache() {
+		log.info(cacheManager.getCacheNames().toString());
+		log.info("------------------------------");
+		userService.findAll();
+		log.info("------------------------------");
+		userService.findAll();
+		log.info("------------------------------");
+		log.info(cacheManager.getCacheNames().toString());
+		log.info(cacheManager.getCache("userCache").get("findAll").get().toString());
+	}
+	
+	@Autowired
+	JmsTemplate template;
+	
+	@Test
+	public void testJmsTemplate() {
+		// string message
+		String msg = "jms test message at: " + new Date();
+		
+		template.convertAndSend(msg);
+		
+		// map message
+		Map<String, Object> mapMsg = new HashMap<>();
+		mapMsg.put("key1", 12345);
+		mapMsg.put("key2", new ArrayList<>().add(new Date()));
+		
+		template.convertAndSend(mapMsg);
+		
+		// 
+			
+	}
+
 	
 }
 
