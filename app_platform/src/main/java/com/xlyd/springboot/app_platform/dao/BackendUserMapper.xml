@@ -22,5 +22,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM `backend_user`
 		WHERE userCode = #{userCode} and userPassword = #{userPassword}
 	</select>
+
+	<select id="findByName" resultType="BackendUser">
+		SELECT
+		  `id`,
+		  `userCode`,
+		  `userName`,
+		  `userType`,
+		  (SELECT valueName FROM data_dictionary
+		  	WHERE typeCode='USER_TYPE' AND valueId=userType) userTypeName,
+		  `createdBy`,
+		  `creationDate`,
+		  `modifyBy`,
+		  `modifyDate`,
+		  `userPassword`
+		FROM `backend_user`
+		WHERE userCode = #{userCode}
+	</select>
 </mapper>
 

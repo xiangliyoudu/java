@@ -17,4 +17,9 @@ public class IBackendUserServiceImpl implements IBackendUserService {
         return iBackendUserDao.findByNameAndPwd(userCode, userPassword);
     }
 
+    @Override
+    public BackendUser findByName(String userCode) {
+        return iBackendUserDao.findByName(userCode);
+    }
+
 }

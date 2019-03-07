@@ -53,5 +53,5 @@ public interface IBackendUserDao {
     BackendUser findByNameAndPwd(@Param("userCode") String userCode,
                                  @Param("userPassword") String userPassword);
 
-
+    BackendUser findByName(@Param("userCode") String userCode);
 }
