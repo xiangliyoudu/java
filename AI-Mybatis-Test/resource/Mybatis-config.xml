@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 引入 数据库配置文件 -->
+	<!-- <properties resource="database1.properties"/> -->
+	<properties resource="database2.properties"/>
+	<settings>
+		<setting name="logImpl" value="LOG4J"/>
+		<!-- resultMap自动映射属性设置：默认为PARTIAL -->
+		<setting name="autoMappingBehavior" value="FULL"/>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	<typeAliases>
+		<package name="pojo"/>
+		<package name="vo"/>
+	</typeAliases>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${user}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!-- <package name="dao"/> -->
+		<!-- <mapper resource="mapper/BdtmCellMapper.xml"/>  --> 
+		
+		<mapper resource="mapper/BookMapper.xml"/>  
+	</mappers>
+	
+	<!-- 
+	<settings>
+		<setting name="logImpl" value="LOG4J"/>
+		<setting name="autoMappingBehavior" value="FULL"/>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	<typeAliases>
+		<package name="com.skycloud.bigdata.bdtm.entity"/>
+		<package name="com.skycloud.bigdata.bdtm.web.vo"/>
+	</typeAliases>
+	 -->
+</configuration>
+
+
+
+

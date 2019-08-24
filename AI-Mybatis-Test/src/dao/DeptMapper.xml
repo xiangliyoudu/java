@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.DeptDao">
+
+	<!-- depts -->
+	<select id="depts" resultType="Dept">
+		SELECT * from SYS_DEPT WHERE  pid= #{parentId}
+	</select>
+	
+	<!-- deptsByDepNO -->
+	<select id="deptsByDepNO" resultType="Dept">
+		SELECT u.*, d.* FROM sys_user u LEFT JOIN sys_user_dept d 
+		on u.id = d.userid WHERE u.state = 1 AND d.did = #{deptId}
+	</select>
+	
+	<!-- tree ，若为tree(int pid) 传入第二个参数为null-->
+	<select id="tree" resultType="ComboTreeVO">
+		<choose>
+			<when test="idtree2 != null">
+				select t.idtree, t.id,t.text, case when t.subs = 0 then 0 
+				else 1 end flag from (select t2.idtree, t2.id, t2.name text,
+				(select count(1) from sys_dept temp where temp.state != 0 
+				 and temp.pid = t2.id) as subs from sys_dept t2 where 
+				 t2.pid = #{parentId} and t2.state !=0) t 
+				where t.idtree not like #{idtree2}
+			</when>
+			<otherwise>
+				select t.id, t.text, case when t.subs = 0 then 0 
+				else 1 end flag from (select t2.id, t2.name text, 
+				(select count(1) from sys_dept temp where temp.state != 0 
+				 and temp.pid = t2.id) as subs 
+				from sys_dept t2 where t2.pid = #{parentId} and t2.state != 0) t 
+			</otherwise>
+		</choose>
+			<!-- select t.id, t.text, case when t.subs = 0 then 0 
+			else 1 end flag from (select t2.id, t2.name text, 
+			(select count(1) from sys_dept temp where temp.state != 0 
+			 and temp.pid = t2.id) as subs 
+			from sys_dept t2 where t2.pid = #{parentId} and t2.state != 0) t  -->
+	</select>
+	
+	<!-- tree(int pid, String idtree2) 重载方法，暂时修改名称为tree2-->
+	<!-- <select id="tree2" resultType="ComboTreeVO">
+		select t.idtree, t.id,t.text, case when t.subs = 0 then 0 
+			else 1 end flag from (select t2.idtree, t2.id, t2.name text,
+			(select count(1) from sys_dept temp where temp.state != 0 
+			 and temp.pid = t2.id) as subs 
+			 from sys_dept t2 where t2.pid = #{parentId} and t2.state !=0) t 
+		<where>
+			<if test="idtree2 != null">
+				t.idtree not like #{idtree2}
+			</if>
+		</where>  
+	</select> -->
+	
+	<!-- byId -->
+	<select id="byId" resultType="Dept">
+		select id, name, pid, description, state, idtree, filename from SYS_DEPT 
+		where id = #{id}
+	</select>
+	
+	<!-- delete -->
+	<update id="delete">
+		update SYS_DEPT set state = 0 where id = #{id}
+	</update>
+	
+	<!-- update -->
+	<update id="update">
+		update SYS_DEPT
+		<choose>
+			<when test="idtree != null">
+				<set>
+					<if test="state == 0">
+						state = 1 
+					</if>
+					<if test="state == 1">
+						state = 0
+					</if>
+				</set>
+				where IDTREE like CONCAT(#{idtree}, '%')
+			</when>
+			<otherwise>
+				<set>
+					<if test="name != null">
+						name = #{name}, 
+					</if>
+					<if test="pid != null">
+						pid = #{pid}, 
+					</if>
+					<if test="description != null">
+						description = #{description}, 
+					</if>
+					<if test="filename != null">
+						filename = #{filename}
+					</if>
+				</set> 
+				where id = #{id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!-- query -->
+	<select id="query" resultType="Dept">
+		<choose>
+			<when test="offset != null and rows != null">
+				SELECT * FROM (SELECT tt.*, ROWNUM AS rowno FROM ( 
+				select d1.id, d1.name, d1.pid, d1.description, d1.state, d1.idtree,
+					d1.filename, d2.name pname from SYS_DEPT d1 left join SYS_DEPT d2 
+					on d1.pid = d2.id
+					<where>
+						<if test="likename != null">
+							d1.name like like '%' || #{likename} || '%'
+						</if>
+						<if test="name != null">
+							and d1.name = #{name}
+						</if>
+					</where>
+					) tt WHERE ROWNUM <![CDATA[<=]]> #{offset} + #{rows}
+				) table_alias WHERE table_alias.rowno > #{rows}
+			</when>
+			<otherwise>
+				select d1.id, d1.name, d1.pid, d1.description, d1.state, d1.idtree,
+				d1.filename, d2.name pname from SYS_DEPT d1 left join SYS_DEPT d2 
+				on d1.pid = d2.id
+				<where>
+					<if test="likename != null">
+						d1.name like '%' || #{likename} || '%'
+					</if>
+					<if test="name != null">
+						and d1.name = #{name}
+					</if>
+				</where>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- count -->
+	<select id="count" resultType="Integer">
+		select count(1) from (select d1.id, d1.name, d1.pid, d1.description, 
+		d1.state, d1.idtree, d1.filename, d2.name pname from SYS_DEPT d1 
+		left join SYS_DEPT d2 on d1.pid = d2.id 
+		<where>
+			<if test="name != null">
+				d1.name like '%' || #{name} || '%'
+			</if>
+		</where>
+		)
+	</select>
+	
+	<!-- queryByUserid -->
+	<select id="queryByUserid" resultType="Dept">
+		SELECT DISTINCT d.* FROM sys_dept d, sys_user u, sys_user_dept ud 
+		WHERE ud.userid = u.id AND ud.did = d.id AND 
+		u.id =  #{userId} and d.state = 1
+	</select>
+	
+	<!-- save -->
+	<insert id="save" parameterType="Dept">
+		insert into SYS_DEPT(id, name, pid, description, idtree, state, filename) 
+		values(SEQ_SYS_DEPT.nextval, 
+			#{name}, 
+			#{pid}, 
+			#{description}, 
+			CONCAT(#{idtree, jdbcType = VARCHAR}, to_char(SEQ_SYS_DEPT.nextval)), 
+			#{state},
+			#{filename, jdbcType = VARCHAR})
+	</insert>
+
+	<!-- queryAll -->
+	<select id="queryAll" resultType="Dept">
+		select * from sys_dept
+	</select>
+	
+	<!-- updateIdtree -->
+	<update id="updateIdtree">
+		update SYS_DEPT set idtree=replace(idtree, #{idtree1}, #{idtree2})
+		 where idtree like CONCAT(#{idtree3}, '%')
+	</update>
+		
+</mapper>
+
+
+
+
+
+

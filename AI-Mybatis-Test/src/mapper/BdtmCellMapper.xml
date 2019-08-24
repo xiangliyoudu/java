@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.BdtmCellMapper">
+	<resultMap id="BaseResultMap" type="pojo.BdtmCell">
+		<result column="NOTEBOOK_ID" jdbcType="DECIMAL" property="NOTEBOOK_ID" />
+		<result column="TYPE" jdbcType="VARCHAR" property="TYPE" />
+		<result column="PAIXU" jdbcType="DECIMAL" property="PAIXU" />
+		<result column="CTIME" jdbcType="TIMESTAMP" property="CTIME" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+		type="pojo.BdtmCellWithBLOBs">
+		<result column="INPUT" jdbcType="CLOB" property="INPUT" />
+		<result column="OUTPUT" jdbcType="CLOB" property="OUTPUT" />
+	</resultMap>
+	
+	<!-- list by notebookId -->
+	<select id="queryByNid" resultMap="ResultMapWithBLOBs">
+		select notebook_id, type, PAIXU, CTIME, input, output from BDTM_CELL 
+			where notebook_id = #{notebookId} ORDER BY PAIXU
+	</select>
+	
+</mapper>

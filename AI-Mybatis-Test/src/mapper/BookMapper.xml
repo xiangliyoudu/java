@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BookDao">
+	
+	<!-- list by notebookId -->
+	<insert id="insertList"  parameterType="java.util.List">
+		INSERT INTO book(bookname, bookprice, booksum, bookpic)
+		values
+		<foreach collection="bookNames" item="bookName" separator="),(" open="(" close=")">
+			#{bookName},
+			100, 999, 'bookpic.png'
+		</foreach>
+	</insert>
+	
+	<select id="queryAll" resultType="Book">
+		select * from book
+	</select>
+	
+</mapper>

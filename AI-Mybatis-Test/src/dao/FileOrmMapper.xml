@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skycloud.bigdata.bdtm.dao.FileOrmDao">
+
+	<!-- hdfsHaveUserAndNot -->
+	<select id="hdfsHaveUserAndNot" resultType="User">
+		SELECT DISTINCT t1.*, NVL (t2.flag, 0) flagnew FROM bdtm_hdfsfiles t3,
+		SYS_USER t1 LEFT JOIN (SELECT fid, userid, 1 flag FROM bdtm_user_files 
+		WHERE auth = 2 and fid = #{fileId}) t2 ON t1.id = t2.userid Left Join 
+		(Select Distinct Ud.*, Nvl(U.Nikename, ' ') Nikename From Sys_User U Left
+		 Join Sys_User_Dept Ud On Ud.Userid = U.Id) D On D.Userid = T1.Id 
+		 Where T1.State = 1 and d.userid <![CDATA[<>]]> #{userId} and did in 
+		 (select d1.id from SYS_DEPT d1 where idtree like CONCAT(#{idtree}, '%')) 
+	</select>
+	
+	<!-- hdfsHaveDeptAndNot -->
+	<select id="hdfsHaveDeptAndNot" resultType="Dept">
+		SELECT DISTINCT t1.*, t2.flag FROM bdtm_hdfsfiles t3, sys_dept t1 LEFT JOIN 
+		(SELECT fid, did, 1 flag FROM bdtm_dept_files WHERE auth = 2 and 
+		fid = #{fileId}) t2 ON t1.id = t2.did WHERE t1.state = 1
+	</select>
+	
+	<!-- delete -->
+	<delete id="delete">
+		delete from bdtm_hdfsfiles where id = #{id}
+	</delete>
+		
+	<!-- deleteByName -->
+	<delete id="deleteByName">
+		delete from bdtm_hdfsfiles where name = #{name}
+	</delete>
+	
+	<!-- deleteUserByfid(int fid) 重载方法-->
+	<delete id="deleteUserByfid">
+		delete from bdtm_user_files where fid = #{fileId}
+	</delete>
+	
+	<!-- deleteDeptByfid(int fid) 重载方法-->
+	<delete id="deleteDeptByfid">
+		delete from bdtm_dept_files where fid = #{fileId}
+	</delete>
+	
+	<!-- save -->
+	<insert id="save" parameterType="FileOrm">
+		INSERT INTO bdtm_hdfsfiles(id, name, descinfo, ispublic, userid, path, fsize)
+		 VALUES (SEQ_BDTM_HDFSFILES.nextval, 
+		 		#{name, jdbcType = VARCHAR}, 
+		 		#{descinfo, jdbcType = VARCHAR}, 
+		 		#{ispublic, jdbcType = NUMERIC},
+		 		#{userid, jdbcType = NUMERIC}, 
+		 		#{path, jdbcType = VARCHAR}, 
+		 		#{fsize, jdbcType = NUMERIC})
+	</insert>
+	
+	<!-- queryByID -->
+	<select id="queryByID" resultType="FileOrm">
+		select * from bdtm_hdfsfiles where id = #{id}
+	</select>
+	
+	<!-- queryByName -->
+	<select id="queryByName" resultType="FileOrm">
+		select * from bdtm_hdfsfiles where name = #{name}
+	</select>
+	
+	<!-- deleteUserByUid -->
+	<delete id="deleteUserByUid">
+		delete from bdtm_user_files where userid = #{userId}
+	</delete>
+	
+	<!-- deleteDeptByDid -->
+	<delete id="deleteDeptByDid">
+		delete from bdtm_dept_files where did = #{deptId}
+	</delete>
+	
+	<!-- update -->
+	<update id="update" parameterType="FileOrm">
+		update bdtm_hdfsfiles set name = #{name}, descinfo = #{descinfo} 
+		where id = #{id}
+	</update>
+	
+	<!-- saveUserFile -->
+	<insert id="saveUserFile">
+		insert into  bdtm_user_files(id, userid, fid) VALUES 
+		(SEQ_BDTM_USER_FILES.nextval,
+		 #{userId, jdbcType = NUMERIC},
+		 #{fileId, jdbcType = NUMERIC})
+	</insert>
+	
+	<!-- query -->
+	<select id="query" resultType="FileOrm">
+		<choose>
+			<when test="offset != null and rows != null">
+				SELECT * FROM (SELECT tt.*, ROWNUM AS rowno FROM ( 
+					select f.*, u.nikename uname from bdtm_hdfsfiles f, 
+					sys_user u  WHERE f.userid = u.id 
+					<if test="likename != null and likename != '' ">
+						and f.name like '%' || #{likename} || '%'
+					</if>
+					<if test="likepath != null and likepath != '' ">
+						and f.path like '%' || #{likepath} || '%'
+					</if>
+					<if test="path != null and path != '' ">
+						and f.path = #{path}
+					</if>
+					<if test="userid != null and userid != '' ">
+						and f.userid = #{userid}
+					</if>
+					order by f.ctime desc
+					) tt WHERE ROWNUM <![CDATA[<=]]> #{offset} + #{rows}
+				) table_alias WHERE table_alias.rowno > #{rows}
+			</when>
+			<otherwise>
+				select f.*, u.nikename uname from bdtm_hdfsfiles f, 
+					sys_user u  WHERE f.userid = u.id 
+					<if test="likename != null and likename != '' ">
+						and f.name like '%' || #{likename} || '%'
+					</if>
+					<if test="likepath != null and likepath != '' ">
+						and f.path like '%' || #{likepath} || '%'
+					</if>
+					<if test="path != null and path != '' ">
+						and f.path = #{path}
+					</if>
+					<if test="userid != null and userid != '' ">
+						and f.userid = #{userid}
+					</if>
+				order by f.ctime desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- count -->	
+	<select id="count" resultType="Integer">
+		select count(1) from(  select f.*, u.nikename uname from
+		 bdtm_hdfsfiles f, sys_user u WHERE f.userid = u.id
+		<if test="likename != null and likename != '' ">
+			and f.name like '%' || #{likename} || '%'
+		</if>
+		<if test="likepath != null and likepath != '' ">
+			and f.path like '%' || #{likepath} || '%'
+		</if>
+		<if test="path != null and path != '' ">
+			and f.path = #{path}
+		</if>
+		<if test="userid != null and userid != '' ">
+			and f.userid = #{userid}
+		</if>
+		order by f.ctime desc)
+	</select>
+	
+	<!-- saveDeptFiles -->
+	<insert id="saveDeptFiles" parameterType="java.util.List">
+		insert into bdtm_dept_files(id, did, fid)
+		SELECT SEQ_BDTM_DEPT_FILES.nextval, A.*	FROM(
+		<foreach collection="deptIds" item="deptId" separator="UNION ALL">
+			<foreach collection="fileIds" item="fileId" separator="UNION ALL">
+				SELECT  
+				#{deptId}, 
+				#{fileId}
+				FROM dual		
+			</foreach>
+		</foreach>
+		)A
+	</insert>
+	
+	<!-- saveUserFiles -->
+	<insert id="saveUserFiles" parameterType="java.util.List">
+		insert into bdtm_user_files(id, userid, fid )
+		SELECT SEQ_BDTM_DEPT_FILES.nextval, A.*	FROM(
+		<foreach collection="userIds" item="userId" separator="UNION ALL">
+			<foreach collection="fileIds" item="fileId" separator="UNION ALL">
+				SELECT  
+				#{userId}, 
+				#{fileId}
+				FROM dual		
+			</foreach>
+		</foreach>
+		)A
+	</insert>
+	
+	<!-- removeDeptFiles -->
+	<delete id="removeDeptFiles"  parameterType="java.util.List">
+		delete from bdtm_dept_files where 
+		<foreach collection="deptIds" item="deptId" separator="or">
+			<foreach collection="fileIds" item="fileId" separator="or">
+				did = #{deptId} 
+				and fid = #{fileId}
+			</foreach>
+		</foreach>
+	</delete>
+	
+	<!-- removeDeptFiles -->
+	<delete id="removeUserFiles"  parameterType="java.util.List">
+		delete from bdtm_user_files where 
+		<foreach collection="userIds" item="userId" separator="or">
+			<foreach collection="fileIds" item="fileId" separator="or">
+				userid = #{userId} 
+				and fid = #{fileId}
+			</foreach>
+		</foreach>
+	</delete>
+	
+	<!-- queryForUser -->
+	<select id="queryForUser" resultType="FileOrm">
+		<choose>
+			<when test="offset != null and rows != null">
+				SELECT * FROM (SELECT tt.*, ROWNUM AS rowno FROM ( 
+				select * from bdtm_hdfsfiles hf 
+				<where>
+					<if test="likename != null and likename != '' ">
+						hf.name like '%' || #{likename} || '%'
+					</if>
+					<if test="likepath != null and likepath != '' ">
+						and hf.path like '%' || #{likepath} || '%'
+					</if>
+					<if test="path != null and path != '' ">
+						and hf.path = #{path}
+					</if>
+					<if test="name != null and name != '' ">
+						and hf.name = #{name}
+					</if>
+					<if test="userid != null and userid != '' and 
+					 	deptidtree != null and deptidtree != '' ">
+						and (EXISTS (SELECT 1 from bdtm_user_files uf left join 
+						(select distinct ud.*, nvl(u.nikename, ' ') nikename from 
+						 SYS_USER u left join SYS_USER_DEPT ud on ud.userid = u.id) d
+						  on d.userid = uf.userid where uf.auth = 2 and uf.fid = hf.id 
+						  and d.did in (select d1.id from SYS_DEPT d1 where 
+						  idtree like concat(#{deptidtree}, '%')) 
+						  or EXISTS (SELECT 1 from bdtm_dept_files df LEFT JOIN sys_dept sd 
+						  on df.did = sd.id where df.auth = 2 and df.fid = hf.id and
+						   sd.idtree LIKE concat(#{deptidtree}, '%'))))
+					</if>
+					<if test="deptidtree2 != null and deptidtree2 != '' ">
+						and ( EXISTS (SELECT 1 from bdtm_user_files uf where uf.auth = 2 
+						 and uf.fid = hf.id and uf.userid = #{userid}) or EXISTS (SELECT 1 from 
+						 bdtm_dept_files df LEFT JOIN sys_dept sd on df.did = sd.id 
+						 where df.auth = 2 and df.fid = hf.id and  df.did = #{dId} ))
+					</if>
+					<if test="userid != null and userid != '' ">
+						and (EXISTS (SELECT 1 from bdtm_user_files uf where uf.fid = hf.id 
+						and uf.auth = 2 and uf.userid = #{userid}))
+					</if>
+				</where>
+				order by hf.ctime desc 
+					) tt WHERE ROWNUM <![CDATA[<=]]> #{offset} + #{rows}
+				) table_alias WHERE table_alias.rowno > #{rows}
+			</when>
+			<otherwise>
+				select * from bdtm_hdfsfiles hf 
+				<where>
+					<if test="likename != null and likename != '' ">
+						hf.name like '%' || #{likename} || '%'
+					</if>
+					<if test="likepath != null and likepath != '' ">
+						and hf.path like '%' || #{likepath} || '%'
+					</if>
+					<if test="path != null and path != '' ">
+						and hf.path = #{path}
+					</if>
+					<if test="name != null and name != '' ">
+						and hf.name = #{name}
+					</if>
+					<if test="userid != null and userid != '' and 
+					 	deptidtree != null and deptidtree != '' ">
+						and (EXISTS (SELECT 1 from bdtm_user_files uf left join 
+						(select distinct ud.*, nvl(u .nikename, ' ') nikename from 
+						 SYS_USER u left join SYS_USER_DEPT ud on ud.userid = u.id) d
+						  on d.userid = uf.userid where uf.auth = 2 and uf.fid = hf.id 
+						  and d.did in (select d1.id from SYS_DEPT d1 where 
+						  idtree like concat(#{deptidtree}, '%')) 
+						  or EXISTS (SELECT 1 from bdtm_dept_files df LEFT JOIN sys_dept sd 
+						  on df.did = sd.id where df.auth = 2 and df.fid = hf.id and
+						   sd.idtree LIKE concat(#{deptidtree}, '%'))))
+					</if>
+					<if test="deptidtree2 != null and deptidtree2 != '' ">
+						and ( EXISTS (SELECT 1 from bdtm_user_files uf where uf.auth = 2 
+						 and uf.fid = hf.id and uf.userid = #{userid}) or EXISTS (SELECT 1 from 
+						 bdtm_dept_files df LEFT JOIN sys_dept sd on df.did = sd.id 
+						 where df.auth = 2 and df.fid = hf.id and  df.did = #{dId} ))
+					</if>
+					<if test="userid != null and userid != '' ">
+						and (EXISTS (SELECT 1 from bdtm_user_files uf where uf.fid = hf.id 
+						and uf.auth = 2 and uf.userid = #{userid}))
+					</if>
+				</where>
+				order by hf.ctime desc 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- countForUser -->
+	<select id="countForUser" resultType="Integer">
+		select count(1) from (select * from bdtm_hdfsfiles hf
+		<where>
+			<if test="likename != null and likename != '' ">
+				hf.name like '%' || #{likename} || '%'
+			</if>
+			<if test="likepath != null and likepath != '' ">
+				and hf.path like '%' || #{likepath} || '%'
+			</if>
+			<if test="path != null and path != '' ">
+				and hf.path = #{path}
+			</if>
+			<if test="userid != null and userid != '' and 
+				deptidtree != null and deptidtree != '' ">
+				and ( EXISTS (SELECT 1 from bdtm_user_files uf left join 
+				(select distinct ud.*, nvl(u.nikename, ' ') nikename from SYS_USER u
+				 left join SYS_USER_DEPT ud on ud.userid = u.id) d ond.userid = uf.userid 
+				 where uf.auth = 2 and uf.fid = hf.id and d.did in (select d1.id from SYS_DEPT d1 
+				 where idtree like concat(#{deptidtree}, '%'))
+				 or EXISTS (SELECT 1 from bdtm_dept_files df LEFT JOIN sys_dept sd on
+				 df.did = sd.id where df.auth = 2 and df.fid = hf.id and 
+				 sd.idtree LIKE concat(#{eptidtree}, '%'))))
+			</if>
+			<if test="deptidtree2 != null and deptidtree2 != '' ">
+				and ( EXISTS (SELECT 1 from bdtm_user_files uf where uf.auth = 2 and 
+				uf.fid = hf.id and uf.userid = #{userid}) 
+				or EXISTS (SELECT 1 from bdtm_dept_files df LEFT JOIN sys_dept sd on 
+				df.did = sd.id where df.auth = 2 and df.fid = hf.id and 
+				df.did = #{dId} ))
+			</if>
+			<if test="userid != null and userid != '' ">
+				and ( EXISTS (SELECT 1 from bdtm_user_files uf where uf.fid = hf.id 
+				and uf.auth = 2 and uf.userid = #{userid})) 
+			</if>
+		</where>
+		 ) t 
+	</select>
+	
+	<!-- queryAll -->
+	<select id="queryAll" resultType="FileOrm">
+		select * from bdtm_hdfsfiles
+	</select>
+	
+	<!-- updateUFNot -->
+	<update id="updateUFNot">
+		update bdtm_user_files set auth = 1 where
+		 fid = #{fileId} 
+		 and userid <![CDATA[<>]]> #{userId} 
+		 and userid in (select distinct ud.userid from SYS_USER u left join
+		  SYS_USER_DEPT ud on ud.userid = u.id where did in (select d1.id
+		   from SYS_DEPT d1 where 
+		   idtree like concat(#{idtree}, '%') ))
+	</update>
+	
+	<!-- updateUFAllNot -->
+	<update id="updateUFAllNot">
+		update bdtm_user_files set auth = 1 where 
+		fid = #{fileId} 
+		and userid in (select distinct ud.userid from SYS_USER u left join
+		 SYS_USER_DEPT ud on ud.userid = u.id where did in (select d1.id 
+		 from SYS_DEPT d1 where 
+		 idtree like concat(#{idtree}, '%') )) 
+	</update>
+	
+	<!-- updateUFByfid -->
+	<update id="updateUFByfid">
+		update bdtm_user_files set auth = 2 where 
+		fid = #{fileId}  
+		and userid = #{userId}
+	</update>
+	
+	<!-- deleteUserByfid(int fid, int userid) 重载方法 -->
+	<update id="deleteUserByfid2">
+		update bdtm_user_files set auth = 1 where 
+		fid = #{fileId}  
+		and userid = #{userId}
+	</update>
+	
+	<!-- deleteDeptByfid(int fid, int did) 重载方法-->
+	<update id="deleteDeptByfid2">
+		update bdtm_dept_files set auth = 1 where 
+		fid = #{fileId} 
+		and did = #{deptId}
+	</update>
+	
+	<!-- queryByFidAndUid -->
+	<select id="queryByFidAndUid" resultType="UserFiles">
+		select * from bdtm_user_files where 
+		fid = #{fileId} 
+		and userid  = #{userId}
+	</select>
+	
+	<!-- queryByFidAndDid -->
+	<select id="queryByFidAndDid" resultType="DeptFiles">
+		select * from bdtm_dept_files where 
+		fid = #{fileId}  
+		and did  = #{deptId}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
