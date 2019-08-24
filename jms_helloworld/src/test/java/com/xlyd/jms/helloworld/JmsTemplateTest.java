@@ -1,10 +1,8 @@
 package com.xlyd.jms.helloworld;
 
-import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Message;
 
-import org.apache.activemq.spring.ActiveMQConnectionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +19,9 @@ public class JmsTemplateTest {
 	@Autowired
 	JmsOperations jo;
 	
-	@Autowired
-	ActiveMQConnectionFactory factory;
-	
 	@Test
 	public void testSend() {
-		final String msg = "this is msg for test";
+		final String msg = "this is topic msg 4 for test";
 		jo.convertAndSend(msg);
 		/*jo.send(new MessageCreator() {
 			
@@ -36,14 +31,6 @@ public class JmsTemplateTest {
 			}
 		});*/
 	}
-	
-	@Test
-	public void testConn() throws JMSException {
-		Connection conn = factory.createConnection();
-		String connid = conn.getClientID();
-		System.out.println(connid);
-	}
-	
 	
 	@Test
 	public void testReceive() throws JMSException {

@@ -45,7 +45,6 @@ public class IndexController {
 			Subject subject = SecurityUtils.getSubject();
 
 			subject.login(token);
-			model.addFlashAttribute("user", user);
 		} catch (UnknownAccountException e) {
 			msg = "’À∫≈≤ª¥Ê‘⁄";
 			model.addAttribute("msg", msg);

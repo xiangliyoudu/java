@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xlyd.mybatis.pagehelper.dao.PhotoDao">
+
+	<resultMap type="Photo" id="ph">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="pic" property="pic" jdbcType="BLOB"/>
+	</resultMap>
+
+	<select id="queryAll" resultMap="ph">
+		select * from photo
+	</select>
+	
+	<insert id="insert" parameterType="Photo">
+		insert into photo(name, pic) values(
+			#{name}, 
+			#{pic, jdbcType= BLOB}
+		)
+	</insert>
+	
+	<select id="selectById" resultType="Photo">
+		select id,name,pic from photo where id = #{id}
+	</select>
+	
+	
+
+</mapper>

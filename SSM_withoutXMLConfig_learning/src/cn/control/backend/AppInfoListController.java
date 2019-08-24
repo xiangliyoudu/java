@@ -101,10 +101,10 @@ public class AppInfoListController {
 		map.put("categoryLevel3", queryCategoryLevel3);
 		
 		// page helper
-		PageHelper.startPage(pageIndex, ROW);
-		List<AppInfo> appInfoList1 = appInfoService.findAll(map);
-		PageInfo<AppInfo> pi = new PageInfo<AppInfo>(appInfoList1);
-		appInfoList1 = pi.getList();
+//		PageHelper.startPage(pageIndex, ROW);
+//		List<AppInfo> appInfoList1 = appInfoService.findAll(map);
+//		PageInfo<AppInfo> pi = new PageInfo<AppInfo>(appInfoList1);
+//		appInfoList1 = pi.getList();
 		
 		// 设置总记录数
 		int count = appInfoService.appCount(map);

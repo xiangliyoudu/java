@@ -6,11 +6,10 @@ import javax.jms.Session;
 
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.listener.adapter.MessagingMessageListenerAdapter;
-import org.springframework.stereotype.Component;
 
 import com.xlyd.demo.config.ActiveMQConfig;
 
-@Component
+//@Component
 public class MQMessageHandler2 extends MessagingMessageListenerAdapter {
 
 	@Override

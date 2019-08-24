@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: eureka-ha
+server:
+  port: 8761
+  
+eureka:
+  instance:
+     # 设置eureka实例名称，与配置文件的变量为主
+    hostname: eureka2 
+     # 设置服务注册中心地址，指向另一个注册中心  
+  client:
+    service-url: {
+      defaultZone: "http://eureka1:8761/eureka/",
+      
+    }  
+
+
+
+
+
+
+

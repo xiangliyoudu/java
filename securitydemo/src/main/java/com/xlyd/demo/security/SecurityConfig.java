@@ -15,7 +15,7 @@ import com.xlyd.demo.util.CryptUtils;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {

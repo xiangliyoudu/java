@@ -44,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	</environments>
 	<mappers>
 		<mapper resource="com/xlyd/mybatis/pagehelper/dao/BookMapper.xml" />
+		<mapper resource="com/xlyd/mybatis/pagehelper/dao/PhotoMapper.xml" />
 	</mappers>
 
 </configuration>

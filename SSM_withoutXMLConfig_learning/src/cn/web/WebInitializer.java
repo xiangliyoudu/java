@@ -7,8 +7,8 @@ import javax.servlet.ServletRegistration.Dynamic;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import webinitializertest.RootConfig;
-import webinitializertest.WebConfig;
+import cn.config.RootConfig;
+import cn.config.WebConfig;
 
 public class WebInitializer extends
 		AbstractAnnotationConfigDispatcherServletInitializer {

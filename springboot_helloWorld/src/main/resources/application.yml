@@ -1,0 +1,37 @@
+server:
+  port: 8889
+spring:  profiles:    active:    - dev
+  
+---
+server:
+  port: 8880
+spring:
+  profiles: dev
+  
+
+logging:  level:    com.xlyd.demo: trace
+  file: springboot.log
+      
+      
+# bean注入值
+student:
+  #name: tom
+  #age: 23
+  gender: true 
+  birthday: 2010/10/10
+  location: 
+      provice: bj
+      city: bj
+      zone: xicheng
+  #{provice: bj, city: bj, zone: xicheng}
+  hobbies: [football, pingpang]
+      #- football
+      #- pingpang
+  skills: [java, python]
+      #- java
+      #- python
+  pet: {name: xiaohua, category: hasky}   
+      #name: xiaohua
+      #category: hasky
+  
+  
